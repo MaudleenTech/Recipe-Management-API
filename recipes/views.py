@@ -3,6 +3,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from .models import Category, Ingredient, Recipe
 from .serializers import CategorySerializer, IngredientSerializer, RecipeSerializer
+from .permissions import IsOwnerOrReadOnly
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -24,6 +25,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all().order_by("-created_at")
+    serializer_class = RecipeSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
