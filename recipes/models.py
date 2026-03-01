@@ -50,6 +50,7 @@ class Recipe(models.Model):
 
     prep_time = models.PositiveIntegerField(null=True, blank=True)
     cook_time = models.PositiveIntegerField(null=True, blank=True)
+    servings = models.PositiveIntegerField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

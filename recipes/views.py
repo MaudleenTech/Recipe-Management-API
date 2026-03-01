@@ -2,10 +2,25 @@ from rest_framework import viewsets, permissions, filters
 from rest_framework.authentication import TokenAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Recipe, Category, Ingredient
-from .serializers import RecipeSerializer, CategorySerializer, IngredientSerializer
+from .models import Category, Ingredient, Recipe
+from .serializers import CategorySerializer, IngredientSerializer, RecipeSerializer
 from .permissions import IsOwnerOrReadOnly
 from .filters import RecipeFilter
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all().order_by("name")
+    serializer_class = CategorySerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class IngredientViewSet(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all().order_by("name")
+    serializer_class = IngredientSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by("-created_at")
