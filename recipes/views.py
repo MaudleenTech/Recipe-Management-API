@@ -6,6 +6,7 @@ from rest_framework import filters
 from .models import Category, Ingredient, Recipe
 from .serializers import CategorySerializer, IngredientSerializer, RecipeSerializer
 from .permissions import IsOwnerOrReadOnly
+from .filters import RecipeFilter
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -43,4 +44,5 @@ class RecipeViewSet(viewsets.ModelViewSet):
 filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 filterset_fields = ["category"]
 search_fields = ["title", "description", "instructions"]
-ordering_fields = ["created_at", "updated_at", "title"]        
+ordering_fields = ["created_at", "updated_at", "title"]   
+filterset_class = RecipeFilter     
