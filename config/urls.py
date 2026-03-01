@@ -6,4 +6,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/token/", obtain_auth_token, name="api-token"),
     path("api/", include("recipes.urls")),
+    path("api/", include("accounts.urls")),
 ]

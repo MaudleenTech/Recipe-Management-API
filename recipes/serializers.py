@@ -84,3 +84,22 @@ class RecipeSerializer(serializers.ModelSerializer):
                 RecipeIngredient.objects.create(recipe=instance, **ri)
 
         return instance
+            
+    def validate(self, attrs):
+        title = attrs.get("title") or getattr(self.instance, "title", None)
+        instructions = attrs.get("instructions") or getattr(self.instance, "instructions", None)
+
+        if not title:
+            raise serializers.ValidationError({"title": "Title is required."})
+        if not instructions:
+            raise serializers.ValidationError({"instructions": "Instructions are required."})
+
+        # On create, ensure at least one ingredient
+        if self.instance is None:
+            recipe_ingredients = self.initial_data.get("recipe_ingredients")
+            if not recipe_ingredients or len(recipe_ingredients) == 0:
+                raise serializers.ValidationError(
+                    {"recipe_ingredients": "At least one ingredient is required."}
+                )        
+
+        return attrs
